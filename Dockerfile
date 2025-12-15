@@ -38,19 +38,18 @@ COPY . .
 # Install dependency project via Composer
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# Ubah permission folder storage dan cache agar bisa ditulisi
-RUN chown -R www-data:www-data storage bootstrap/cache
-RUN chmod -R 775 storage bootstrap/cache
+# --- PERBAIKAN 1: Buat folder views secara manual untuk jaga-jaga ---
+RUN mkdir -p resources/views storage/framework/views
 
-# Konfigurasi Port untuk Render (Render menggunakan variabel $PORT)
-# Kita ganti port 80 default apache dengan $PORT dari Render
+# Ubah permission folder storage dan cache agar bisa ditulisi
+RUN chown -R www-data:www-data storage bootstrap/cache resources/views
+RUN chmod -R 775 storage bootstrap/cache resources/views
+
+# Konfigurasi Port untuk Render
 RUN sed -i "s/80/\${PORT}/g" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
 
+# --- PERBAIKAN 2: Hapus 'php artisan view:cache' dari perintah start ---
 # Perintah yang dijalankan saat container start
-# 1. Cache config & route
-# 2. Jalankan migrasi database (force)
-# 3. Jalankan Apache
 CMD php artisan config:cache && \
     php artisan route:cache && \
-    php artisan view:cache && \
     apache2-foreground
