@@ -11,41 +11,49 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // 1. Buat Akun Admin
-        User::create([
-            'name' => 'Admin Utama',
-            'email' => 'admin@pdam.com',
-            'password' => Hash::make('admin123'),
-            'email_verified_at' => now(),
-        ]);
+        // 1. Buat Akun Admin (Cek berdasarkan email agar tidak duplikat)
+        User::firstOrCreate(
+            ['email' => 'admin@pdam.com'], // <- Kunci pencarian
+            [
+                'name' => 'Admin Utama',
+                'password' => Hash::make('admin123'),
+                'email_verified_at' => now(),
+            ]
+        );
 
         // 2. Buat Akun Petugas Lapangan
-        User::create([
-            'name' => 'Budi Petugas',
-            'email' => 'budi@pdam.com',
-            'password' => Hash::make('petugas123'),
-            'email_verified_at' => now(),
-        ]);
+        User::firstOrCreate(
+            ['email' => 'budi@pdam.com'], // <- Kunci pencarian
+            [
+                'name' => 'Budi Petugas',
+                'password' => Hash::make('petugas123'),
+                'email_verified_at' => now(),
+            ]
+        );
 
-        // 3. Buat Data Pelanggan Dummy
-        Pelanggan::create([
-            'nama' => 'Budi Santoso (SQLite)',
-            'alamat_rumah' => 'Jl. Merdeka No. 1, Mataram',
-            'status' => 'aktif',
-            'latitude' => -8.583333,
-            'longitude' => 116.116669,
-            'no_ktp' => '5201234567890001',
-            'telepon' => '081234567890'
-        ]);
+        // 3. Buat Data Pelanggan Dummy (Cek berdasarkan No KTP)
+        Pelanggan::firstOrCreate(
+            ['no_ktp' => '5201234567890001'], // <- Kunci pencarian
+            [
+                'nama' => 'Budi Santoso (SQLite)',
+                'alamat_rumah' => 'Jl. Merdeka No. 1, Mataram',
+                'status' => 'aktif',
+                'latitude' => -8.583333,
+                'longitude' => 116.116669,
+                'telepon' => '081234567890'
+            ]
+        );
 
-        Pelanggan::create([
-            'nama' => 'Siti Aminah',
-            'alamat_rumah' => 'Jl. Udayana No. 5, Mataram',
-            'status' => 'aktif',
-            'latitude' => -8.590000,
-            'longitude' => 116.120000,
-            'no_ktp' => '5201234567890002',
-            'telepon' => '081987654321'
-        ]);
+        Pelanggan::firstOrCreate(
+            ['no_ktp' => '5201234567890002'], // <- Kunci pencarian
+            [
+                'nama' => 'Siti Aminah',
+                'alamat_rumah' => 'Jl. Udayana No. 5, Mataram',
+                'status' => 'aktif',
+                'latitude' => -8.590000,
+                'longitude' => 116.120000,
+                'telepon' => '081987654321'
+            ]
+        );
     }
 }
