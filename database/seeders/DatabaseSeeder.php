@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         Pelanggan::firstOrCreate(
             ['no_ktp' => '5201234567890001'], // <- Kunci pencarian
             [
-                'nama' => 'Budi Santoso (SQLite)',
+                'nama' => 'Budi Santoso',
                 'alamat_rumah' => 'Jl. Merdeka No. 1, Mataram',
                 'status' => 'aktif',
                 'latitude' => -8.583333,
